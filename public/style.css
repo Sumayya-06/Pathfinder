@@ -75,12 +75,12 @@ h1 {
 }
 
 #chatInput:focus {
-    border-color: #4CAF50;
+    border-color: #1E3A8A;
     box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.2);
 }
 
 #sendButton {
-    background-color: #4CAF50;
+    background-color: #1E3A8A;
     color: white;
     border: none;
     padding: 10px 20px;
@@ -91,5 +91,5 @@ h1 {
 }
 
 #sendButton:hover {
-    background-color: #45a049;
+    background-color: #1E3A8A;
 }
