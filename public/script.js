@@ -24,29 +24,32 @@ document.addEventListener('DOMContentLoaded', () => {
         addMessage('Thinking...', 'bot');
 
         try {
-            // Replace with your actual Cloud Function URL later
-            // const response = await fetch('YOUR_CLOUD_FUNCTION_URL', {
-            //     method: 'POST',
-            //     headers: {
-            //         'Content-Type': 'application/json',
-            //     },
-            //     body: JSON.stringify({ message: userMessage }),
-            // });
-            // const data = await response.json();
-            // chatMessages.lastChild.remove(); // Remove "Thinking..." message
-            // addMessage(data.response, 'bot');
+            const CLOUD_FUNCTION_URL = 'YOUR_CLOUD_FUNCTION_URL_HERE'; // <<< PASTE YOUR URL HERE
 
-            // Placeholder for now:
-            setTimeout(() => {
-                chatMessages.lastChild.remove(); // Remove "Thinking..." message
-                addMessage(`I received "${userMessage}". I'm not smart yet!`, 'bot');
-                sendButton.disabled = false;
-            }, 1000); // Simulate delay
+            const response = await fetch(CLOUD_FUNCTION_URL, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ message: userMessage }),
+            });
+        
+            // Remove the "Thinking..." message before displaying the actual response
+            chatMessages.lastChild.remove(); 
+        
+            if (!response.ok) {
+                const errorText = await response.text();
+                throw new Error(`HTTP error! status: ${response.status}, message: ${errorText}`);
+            }
+        
+            const data = await response.json();
+            addMessage(data.response, 'bot');
         } catch (error) {
-            console.error('Error sending message:', error);
-            chatMessages.lastChild.remove(); // Remove "Thinking..." message
-            addMessage('Oops! Something went wrong. Please try again.', 'bot');
-            sendButton.disabled = false;
+            console.error('Error calling Cloud Function:', error);
+            chatMessages.lastChild.remove();
+            addMessage('Oops! The chatbot encountered an error. Please try again.', 'bot');
+        }finally {
+            sendButton.disabled = false; // Re-enable button
         }
     }
 
