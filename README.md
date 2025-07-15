@@ -23,8 +23,6 @@ Many college students face uncertainty regarding their career trajectories. They
 * **Firebase Hosting:** Utilized for fast, secure, and reliable deployment and serving of the chatbot's static frontend (HTML, CSS, JavaScript).
 * **Firebase Studio (IDX):** The integrated development environment provided by Google for building, testing, and deploying the application directly within the browser.
 * **Google Gemini API (Generative Language API):** The core Google AI technology intended to power the chatbot's intelligent responses.
-* **Firebase Cloud Functions:** Planned as the secure backend service to proxy requests to the Gemini API, ensuring the API key's security and bypassing browser-side limitations like CORS.
-* **Google Cloud Console:** Used for managing API keys, enabling Google Cloud services (like Generative Language API and Artifact Registry API), and configuring permissions.
 * **Git / GitHub:** Employed for version control, tracking changes, and managing the project's codebase.
 
 ## Technical Challenges & Learnings
