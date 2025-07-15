@@ -1,8 +1,4 @@
-// WARNING: This is NOT a secure way to handle API keys in production.
-// For this GDG prototype due to credit card restrictions, we are making an exception.
-const GEMINI_API_KEY = "AIzaSyCcn1apO1SYfa8W1_d3sAF1qgsggqINcSk"; 
-
-document.addEventListener('DOMContentLoaded', () => {
+ document.addEventListener('DOMContentLoaded', () => {
     const chatMessages = document.getElementById('chatMessages');
     const chatInput = document.getElementById('chatInput');
     const sendButton = document.getElementById('sendButton');
@@ -26,57 +22,33 @@ document.addEventListener('DOMContentLoaded', () => {
         addMessage('Thinking...', 'bot'); // Show thinking message
     
         try {
-            // Direct call to Gemini API
-            const API_URL = "https://generativelanguage.googleapis.com/v1beta1/models/gemini-pro:generateContent?key=" + GEMINI_API_KEY;
-            const systemPrompt = `You are a helpful and encouraging Career Roadmap Chatbot for college students. Your goal is to provide guidance on career paths, required skills, and and interview tips. Keep responses concise and actionable.
+            // This is the URL of your deployed Firebase Cloud Function
+            // REPLACE 'YOUR_CLOUD_FUNCTION_URL_HERE' with the URL you copied from Step 4
+            const CLOUD_FUNCTION_URL = 'YOUR_CLOUD_FUNCTION_URL_HERE'; 
     
-            When asked about:
-            - Career paths: Suggest relevant paths based on major/interests and briefly describe them.
-            - Required skills: List essential skills for a given role and suggest general ways to acquire them (e.g., online courses, projects).
-            - Interview tips: Provide actionable advice or common questions for a specific job title or general interviews.
-    
-            Always maintain a positive and supportive tone. If a question is outside these topics (e.g., unrelated personal advice, complex technical debugging), politely redirect to your core functions.`;
-    
-            // Combine system prompt and user message for the API call
-            const payload = {
-                contents: [
-                    {
-                        role: "user",
-                        parts: [{ text: systemPrompt + "\n\n" + userInput }]
-                    }
-                ],
-                generationConfig: {
-                    maxOutputTokens: 200, // Limit response length
-                },
-            };
-    
-            const response = await fetch(API_URL, {
+            const response = await fetch(CLOUD_FUNCTION_URL, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify(payload),
+                body: JSON.stringify({ message: userInput }), // Ensure 'userInput' is passed as 'message'
             });
     
             // Remove the "Thinking..." message before displaying the actual response
             chatMessages.lastChild.remove(); 
     
             if (!response.ok) {
-                // Try to get more detailed error from the API
-                const errorData = await response.json();
-                console.error('Gemini API Error:', errorData);
-                throw new Error(`Gemini API error! Status: ${response.status}, Details: ${errorData.error.message || 'Unknown error'}`);
+                const errorText = await response.text();
+                throw new Error(`HTTP error! status: ${response.status}, message: ${errorText}`);
             }
     
             const data = await response.json();
-            const geminiResponse = data.candidates[0].content.parts[0].text;
-            addMessage(geminiResponse, 'bot'); // Display Gemini's response
+            addMessage(data.response, 'bot'); // Display Gemini's response
     
         } catch (error) {
-            console.error('Error calling Gemini API directly:', error);
+            console.error('Error calling Cloud Function:', error);
             chatMessages.lastChild.remove(); // Remove "Thinking..." message
             addMessage('Oops! The chatbot encountered an error. Please try again. (Check console for details)', 'bot');
-            // IMPORTANT: If you encounter CORS errors here, you might need to try restricting your API key by HTTP referrer in Google Cloud Console if allowed for Gemini.
         } finally {
             sendButton.disabled = false; // Re-enable button
         }
