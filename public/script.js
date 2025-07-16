@@ -2,6 +2,44 @@
 // For this GDG prototype due to credit card restrictions, we are making an exception.
 const GEMINI_API_KEY = "AIzaSyCcn1apO1SYfa8W1_d3sAF1qgsggqINcSk"; 
 
+// Firebase Config
+const firebaseConfig = {
+    apiKey: "AIzaSyCu5JyCL5LbTpvm5c2YDFOzBiNDIq_zUq4",
+    authDomain: "pathfinder-1d5df.firebaseapp.com",
+  };
+  
+  firebase.initializeApp(firebaseConfig);
+  const auth = firebase.auth();
+  
+  // Signup modal handling
+  const signupModal = document.getElementById("signupModal");
+  const signupTrigger = document.getElementById("signupTrigger");
+  const closeModal = document.getElementById("closeModal");
+  const submitSignup = document.getElementById("submitSignup");
+  
+  signupTrigger.onclick = () => signupModal.style.display = "flex";
+  closeModal.onclick = () => signupModal.style.display = "none";
+  
+  submitSignup.onclick = async () => {
+    const email = document.getElementById("emailInput").value;
+    const password = document.getElementById("passwordInput").value;
+  
+    try {
+      await auth.createUserWithEmailAndPassword(email, password);
+      alert("Account created successfully!");
+      signupModal.style.display = "none";
+    } catch (error) {
+      alert("Signup error: " + error.message);
+    }
+  };
+  
+  // Dark Mode Toggle
+  const toggle = document.getElementById("darkToggle");
+  toggle.addEventListener("change", () => {
+    document.body.classList.toggle("dark", toggle.checked);
+  });
+  
+
 document.addEventListener('DOMContentLoaded', () => {
     const chatMessages = document.getElementById('chatMessages');
     const chatInput = document.getElementById('chatInput');
