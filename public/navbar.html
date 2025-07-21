@@ -1,0 +1,43 @@
+<!-- Navbar -->
+<nav class="navbar">
+  <div class="nav-logo">Pathfinder 🚀</div>
+  <div class="nav-links">
+    <a href="index.html" class="nav-item">Home</a>
+    <a href="tracker.html" class="nav-item">Skill Tracker</a>
+    <a href="resources.html" class="nav-item">Resources</a>
+    <button id="loginBtn" class="nav-login">Login</button>
+    <div id="profileMenu" class="profile-menu" style="display: none;">
+      <div class="profile-icon" id="profileIcon">👤</div>
+      <div class="dropdown" id="dropdownMenu">
+        <p id="userEmailDisplay"></p>
+        <button id="logoutBtn">Logout</button>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- Login Modal -->
+<div id="loginModal" class="modal">
+  <div class="modal-content">
+    <span class="close" id="closeModal">&times;</span>
+    <h2>Login</h2>
+    <input type="email" id="loginEmail" placeholder="Email">
+    <input type="password" id="loginPassword" placeholder="Password">
+    <button id="emailLoginBtn">Login</button>
+    <label class="remember-me">
+      <input type="checkbox" id="rememberMe"> Remember Me
+    </label>
+    <button id="googleLoginBtn" class="google-btn">Login with Google</button>
+  </div>
+</div>
+
+<!-- Signup Modal -->
+<div id="signupModal" class="modal">
+  <div class="modal-content">
+    <span class="close" id="closeSignup">&times;</span>
+    <h2>Sign Up</h2>
+    <input type="email" id="signupEmail" placeholder="Email">
+    <input type="password" id="signupPassword" placeholder="Password">
+    <button id="emailSignupBtn">Sign Up</button>
+  </div>
+</div>

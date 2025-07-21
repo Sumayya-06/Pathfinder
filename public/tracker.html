@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Skill Tracker - Pathfinder 🚀</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+</head>
+<body>
+  <!-- Navbar -->
+  <div id="navbar-container"></div>
+
+  <!-- Skill Tracker Section -->
+  <section class="tracker-section">
+    <h2>Skill Tracker</h2>
+    <div class="tracker-container">
+      <input type="text" id="skillInput" placeholder="Enter a skill">
+      <button id="addSkillBtn">Add Skill</button>
+      <ul id="skillList" class="skill-list"></ul>
+    </div>
+  </section>
+
+  <script>
+    fetch('navbar.html')
+      .then(res => res.text())
+      .then(data => {
+        document.getElementById('navbar-container').innerHTML = data;
+        document.dispatchEvent(new Event('navbarLoaded'));
+      });
+  </script>
+
+  <script>
+    const addSkillBtn = document.getElementById('addSkillBtn');
+    const skillInput = document.getElementById('skillInput');
+    const skillList = document.getElementById('skillList');
+
+    // Load saved skills from localStorage
+    window.addEventListener('load', () => {
+      const savedSkills = JSON.parse(localStorage.getItem('skills')) || [];
+      savedSkills.forEach(skillObj => addSkill(skillObj.text, skillObj.done));
+    });
+
+    // Add skill button click
+    addSkillBtn.addEventListener('click', () => {
+      const skill = skillInput.value.trim();
+      if (skill === "") return;
+      addSkill(skill, false);
+      saveSkills();
+      skillInput.value = "";
+    });
+
+    // Function to create skill list item
+    function addSkill(text, done) {
+      const li = document.createElement('li');
+      li.innerHTML = `
+        <label>
+          <input type="checkbox" ${done ? 'checked' : ''}>
+          ${text}
+        </label>
+        <button class="deleteBtn">❌</button>
+      `;
+
+      // Handle checkbox change
+      li.querySelector('input[type="checkbox"]').addEventListener('change', saveSkills);
+
+      // Handle delete
+      li.querySelector('.deleteBtn').addEventListener('click', () => {
+        li.remove();
+        saveSkills();
+      });
+
+      skillList.appendChild(li);
+    }
+
+    // Save skills to localStorage
+    function saveSkills() {
+      const skills = [];
+      skillList.querySelectorAll('li').forEach(li => {
+        const checkbox = li.querySelector('input[type="checkbox"]');
+        const text = li.querySelector('label').innerText.trim();
+        skills.push({ text, done: checkbox.checked });
+      });
+      localStorage.setItem('skills', JSON.stringify(skills));
+    }
+  </script>
+
+  <script src="script.js"></script>
+</body>
+</html>

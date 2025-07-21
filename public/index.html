@@ -1,62 +1,115 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Career Roadmap Chatbot</title>
-  <link rel="stylesheet" href="style.css" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pathfinder 🚀</title>
+  <link rel="stylesheet" href="style.css">
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
 </head>
 <body>
+  <!-- Navbar -->
+  <div id="navbar-container"></div>
 
-  <!-- Navigation Bar -->
-  <nav class="navbar">
-    <div class="nav-logo">Pathfinder 🚀</div>
-    <div class="nav-actions">
-      <span id="userEmail" class="user-info"></span>
-      <button class="auth-btn" id="signupTrigger">Sign Up</button>
-      <button class="auth-btn" id="logoutBtn" style="display: none;">Logout</button>
+  <!-- Career Section -->
+  <section class="career-section">
+    <h2>Select Your Career Path</h2>
+    <div id="careerList" class="career-list">
+      <div class="career-item" data-roadmap="roadmap-web">Web Development</div>
+      <div id="roadmap-web" class="roadmap hidden">
+        <ul>
+          <li>Fundamentals: Master HTML, CSS, & JavaScript</li>
+          <li>Frontend: Learn a framework like React, Angular, or Vue.js</li>
+          <li>Backend: Explore Node.js (Express), Python(Django/Flask), or PHP</li>
+          <li>Databases: Understand SQL (e.g., MySQL) or NoSQL (e.g., MongoDB)</li>
+          <li>Deployment: Get familiar with cloud platforms like Firebase Hosting, or Vercel</li>
+        </ul>
+      </div>
+
+      <div class="career-item" data-roadmap="roadmap-app">App Development</div>
+      <div id="roadmap-app" class="roadmap hidden">
+        <ul>
+          <li>Mobile (Native): Kotlin/Java for Android, Swift/Objective-C for iOS</li>
+          <li>Mobile (Cross-Platform): Learn React Native or Flutter</li>
+          <li>Fundamentals: Learn language (e.g., Kotlin, Swift) and UI/UX principles</li>
+          <li>APIs & Databases: Connect apps to backends and manage data locally or remotely</li>
+        </ul>
+      </div>
       
-      <!-- Dark Mode Label + Toggle -->
-      <label class="toggle-label">
-        Dark Mode
-        <label class="switch">
-          <input type="checkbox" id="darkToggle">
-          <span class="slider round"></span>
-        </label>
-      </label>
-    </div>
-  </nav>
-  
+      <div class="career-item" data-roadmap="roadmap-ai">AI & Machine Learning</div>
+      <div id="roadmap-ai" class="roadmap hidden">
+        <ul>
+          <li>Foundations: Strong in Python programming, Linear Algebra, Calculus, & Statistics</li>
+          <li>ML Algorithms: Understand Supervised, Unsupervised, and Reinforcement Learning</li>
+          <li>Deep Learning: Learn frameworks like TensorFlow or PyTorch</li>
+          <li>Projects: Build models and participate in competitions (e.g., Kaggle)</li>
+        </ul>
+      </div>
 
-  <!-- Hero Section -->
-  <section class="hero">
-    <h1>Build Your Career Roadmap</h1>
-    <p>Your personal AI career buddy – Ask about career paths, skills, and interviews.</p>
+      <div class="career-item" data-roadmap="roadmap-data-science">Data Science</div>
+      <div id="roadmap-data-science" class="roadmap hidden">
+        <ul>
+          <li>Programming: Primarily Python and/or R</li>
+          <li>Mathematics & Statistics: Core understanding for data analysis and modeling</li>
+          <li>Data Wrangling: Skills in collecting, cleaning, and transforming data</li>
+          <li>Data Visualization: Tools like Matplotlib, Seaborn, or Tableau for insights</li>
+          <li>Machine Learning: Apply ML algorithms for predictive modeling</li>
+        </ul>
+      </div>
+
+      <div class="career-item" data-roadmap="roadmap-cyber">Cybersecurity</div>
+      <div id="roadmap-cyber" class="roadmap hidden">
+        <ul>
+          <li>Networking: Strong understanding of TCP/IP, firewalls, and network protocols</li>
+          <li>OS: In-depth knowledge of Linux/Unix and Windows security</li>
+          <li>Security Concepts: Learn about cryptography, access control, and threat modeling</li>
+          <li>CTools: Familiarity with ethical hacking tools, vulnerability scanners, and SIEM system</li>
+          <li>Compliance: Understand security standards and regulations</li>
+        </ul>
+      </div>
+    </div>
   </section>
 
-  <!-- Chat Section -->
-  <div class="chat-container">
-    <div class="chat-messages" id="chatMessages">
-      <div class="message bot">Hello! I'm your Career Roadmap Chatbot. Ask me about career paths, skills, or interview tips.</div>
-    </div>
-    <div class="chat-input-area">
-      <input type="text" id="chatInput" placeholder="Type your message...">
-      <button id="sendButton">Send</button>
+  <!-- Login Modal -->
+  <div id="loginModal" class="modal">
+    <div class="modal-content">
+      <span class="close" id="closeModal">&times;</span>
+      <h2>Login</h2>
+      <input type="email" id="loginEmail" placeholder="Email">
+      <input type="password" id="loginPassword" placeholder="Password">
+      <button id="emailLoginBtn" class="login-btn">Login</button>
+
+      <div class="remember-me">
+        <input type="checkbox" id="rememberMe">
+        <label for="rememberMe">Remember Me</label>
+      </div>
+
+      <button id="googleLoginBtn" class="google-btn">Login with Google</button>
+      <p style="margin-top: 10px; font-size: 0.9rem;" class="signup-text">New user? <a href="#" id="openSignup">Sign Up</a></p>
     </div>
   </div>
 
-  <!-- Signup Modal -->
-  <div class="modal" id="signupModal">
-    <div class="modal-content">
-      <span class="close" id="closeModal">&times;</span>
-      <h2>Sign Up</h2>
-      <input type="email" id="emailInput" placeholder="Email" />
-      <input type="password" id="passwordInput" placeholder="Password" />
-      <button id="submitSignup">Create Account</button>
-    </div>
+  <!-- Sign Up Modal -->
+<div id="signupModal" class="modal">
+  <div class="modal-content">
+    <span class="close" id="closeSignup">&times;</span>
+    <h2>Sign Up</h2>
+    <input type="email" id="signupEmail" placeholder="Email">
+    <input type="password" id="signupPassword" placeholder="Password">
+    <button id="signupBtn">Create Account</button>
   </div>
+</div>
+
+  <script>
+    fetch('navbar.html')
+      .then(res => res.text())
+      .then(data => {
+        document.getElementById('navbar-container').innerHTML = data;
+        document.dispatchEvent(new Event('navbarLoaded'));
+      });
+  </script>
   <script src="script.js"></script>
+  
 </body>
 </html>
